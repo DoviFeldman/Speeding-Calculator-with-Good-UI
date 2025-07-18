@@ -1,0 +1,267 @@
+// From Claude 4 Sonnet thinking
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speeding Time Saved Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .toggle-btn {
+            padding: 8px 15px;
+            border: 2px solid #4CAF50;
+            background-color: white;
+            color: #4CAF50;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .toggle-btn.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .distance-inputs, .time-inputs {
+            margin-top: 10px;
+        }
+        
+        .time-inputs {
+            display: none;
+        }
+        
+        .results {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .time-saved {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d9534f;
+            margin-bottom: 10px;
+        }
+        
+        .breakdown {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .explanation {
+            background-color: #e7f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .explanation h3 {
+            margin-top: 0;
+            color: #2c5aa0;
+        }
+        
+        .formula {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚗 Speeding Time Saved Calculator</h1>
+        
+        <div class="input-group">
+            <label for="speedLimit">Speed Limit (mph):</label>
+            <input type="number" id="speedLimit" value="65" min="1" max="200">
+        </div>
+        
+        <div class="input-group">
+            <label for="speedingSpeed">Your Speed (mph):</label>
+            <input type="number" id="speedingSpeed" value="80" min="1" max="200">
+        </div>
+        
+        <div class="input-group">
+            <div class="toggle-container">
+                <span>Calculate by:</span>
+                <button class="toggle-btn active" id="distanceBtn" onclick="toggleMode('distance')">Distance</button>
+                <button class="toggle-btn" id="timeBtn" onclick="toggleMode('time')">Time</button>
+            </div>
+            
+            <div class="distance-inputs" id="distanceInputs">
+                <label for="distance">Distance (miles):</label>
+                <input type="number" id="distance" value="100" min="0.1" step="0.1">
+            </div>
+            
+            <div class="time-inputs" id="timeInputs">
+                <label for="timeHours">Time (hours):</label>
+                <input type="number" id="timeHours" value="1" min="0.01" step="0.01">
+                <label for="timeSpeed" style="margin-top: 10px;">At Speed (mph):</label>
+                <input type="number" id="timeSpeed" value="65" min="1" max="200">
+            </div>
+        </div>
+        
+        <div class="results">
+            <div class="time-saved" id="timeSaved">0 minutes</div>
+            <div class="breakdown" id="breakdown">
+                Time at speed limit: <span id="normalTime">0 hours 0 minutes</span><br>
+                Time at your speed: <span id="speedingTime">0 hours 0 minutes</span>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h3>How This Works</h3>
+            <p>This calculator shows you exactly how much time you save (or don't save) by speeding. The math is simple:</p>
+            
+            <div class="formula">
+                Time = Distance ÷ Speed
+            </div>
+            
+            <p><strong>Step 1:</strong> Calculate time at speed limit<br>
+            <strong>Step 2:</strong> Calculate time at your actual speed<br>
+            <strong>Step 3:</strong> Subtract to find time saved</p>
+            
+            <p><strong>Example:</strong> Going 80 mph instead of 65 mph for 100 miles saves you only about 18 minutes. Is the risk of a ticket, higher fuel costs, and safety concerns worth those 18 minutes?</p>
+            
+            <p><em>Remember: Small speed increases yield surprisingly small time savings, especially over shorter distances.</em></p>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'distance';
+        
+        function toggleMode(mode) {
+            currentMode = mode;
+            
+            // Update button styles
+            document.getElementById('distanceBtn').classList.toggle('active', mode === 'distance');
+            document.getElementById('timeBtn').classList.toggle('active', mode === 'time');
+            
+            // Show/hide input sections
+            document.getElementById('distanceInputs').style.display = mode === 'distance' ? 'block' : 'none';
+            document.getElementById('timeInputs').style.display = mode === 'time' ? 'block' : 'none';
+            
+            calculate();
+        }
+        
+        function formatTime(hours) {
+            const totalMinutes = hours * 60;
+            const h = Math.floor(totalMinutes / 60);
+            const m = Math.round(totalMinutes % 60);
+            
+            if (h === 0) {
+                return `${m} minute${m !== 1 ? 's' : ''}`;
+            } else if (m === 0) {
+                return `${h} hour${h !== 1 ? 's' : ''}`;
+            } else {
+                return `${h} hour${h !== 1 ? 's' : ''} ${m} minute${m !== 1 ? 's' : ''}`;
+            }
+        }
+        
+        function calculate() {
+            const speedLimit = parseFloat(document.getElementById('speedLimit').value) || 0;
+            const speedingSpeed = parseFloat(document.getElementById('speedingSpeed').value) || 0;
+            
+            let distance;
+            
+            if (currentMode === 'distance') {
+                distance = parseFloat(document.getElementById('distance').value) || 0;
+            } else {
+                const timeHours = parseFloat(document.getElementById('timeHours').value) || 0;
+                const timeSpeed = parseFloat(document.getElementById('timeSpeed').value) || 0;
+                distance = timeHours * timeSpeed;
+            }
+            
+            if (speedLimit <= 0 || speedingSpeed <= 0 || distance <= 0) {
+                document.getElementById('timeSaved').textContent = '0 minutes';
+                document.getElementById('normalTime').textContent = '0 hours 0 minutes';
+                document.getElementById('speedingTime').textContent = '0 hours 0 minutes';
+                return;
+            }
+            
+            const normalTime = distance / speedLimit;
+            const speedingTime = distance / speedingSpeed;
+            const savedTime = normalTime - speedingTime;
+            
+            document.getElementById('normalTime').textContent = formatTime(normalTime);
+            document.getElementById('speedingTime').textContent = formatTime(speedingTime);
+            
+            if (savedTime > 0) {
+                document.getElementById('timeSaved').textContent = `${formatTime(savedTime)} saved`;
+                document.getElementById('timeSaved').style.color = '#d9534f';
+            } else if (savedTime < 0) {
+                document.getElementById('timeSaved').textContent = `${formatTime(-savedTime)} lost`;
+                document.getElementById('timeSaved').style.color = '#5cb85c';
+            } else {
+                document.getElementById('timeSaved').textContent = 'No time difference';
+                document.getElementById('timeSaved').style.color = '#666';
+            }
+        }
+        
+        // Add event listeners for real-time calculation
+        document.getElementById('speedLimit').addEventListener('input', calculate);
+        document.getElementById('speedingSpeed').addEventListener('input', calculate);
+        document.getElementById('distance').addEventListener('input', calculate);
+        document.getElementById('timeHours').addEventListener('input', calculate);
+        document.getElementById('timeSpeed').addEventListener('input', calculate);
+        
+        // Initial calculation
+        calculate();
+    </script>
+</body>
+</html>
