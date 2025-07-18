@@ -1,0 +1,18 @@
+make me a github pages website, all in 1 file) that is a speeding time saved calculator.
+i want there to be speed limit input with the default set to 65 mph, i want a speeding input with the default set to 80 mph, i want a distance input with the default set to 100 miles distance, and i also want there to be an option right next to it where you can select "time" instead of distance, with a speed input, default 65 mph, and it will calculate the distance at that time if you were going that speed.
+
+under all that but not too low down that you shouldnt need to scroll to see it, should be the calcualted resuts, shown by "1 hours" "40 minutes" template, not like "1:40", i dont like that. it should be simple.
+
+under that, and you can scroll if needed, there should be a short explination for what calcualtions are being done and how to calculate it yourself 
+
+
+the calculated numbers should show up immediatly in real time as you are filling out the input fields, without having to press any button.
+
+
+i want to show people how little time they save by speeding
+
+
+// SECOND PROMPT
+
+
+great! love it perfect has all the features! can you plase update the UI to make it look super beautiful, while keeping all the requirements
