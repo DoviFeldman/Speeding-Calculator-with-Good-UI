@@ -1,81 +1,184 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    // From Claude 4 Sonnet thinking
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Speeding Time Saved Calculator</title>
+    // From Claude 4 Sonnet Thinking
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
-            background-color: #f5f5f5;
         }
         
         .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            50% { transform: translate(-50%, -50%) rotate(180deg); }
         }
         
         h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .input-section {
+            display: grid;
+            gap: 25px;
+            margin-bottom: 40px;
         }
         
         .input-group {
-            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.95em;
+        }
+        
+        .input-wrapper {
+            position: relative;
+            display: inline-block;
         }
         
         input[type="number"] {
-            width: 100px;
-            padding: 8px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            width: 120px;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
             font-size: 16px;
+            font-weight: 500;
+            background: white;
+            transition: all 0.3s ease;
+            color: #2d3748;
         }
         
         input[type="number"]:focus {
             outline: none;
-            border-color: #4CAF50;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .unit {
+            margin-left: 10px;
+            color: #718096;
+            font-weight: 500;
+            font-size: 0.9em;
         }
         
         .toggle-container {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .toggle-label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        .toggle-buttons {
+            display: flex;
+            background: #f7fafc;
+            padding: 4px;
+            border-radius: 12px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
         }
         
         .toggle-btn {
-            padding: 8px 15px;
-            border: 2px solid #4CAF50;
-            background-color: white;
-            color: #4CAF50;
-            border-radius: 5px;
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            color: #718096;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
         }
         
         .toggle-btn.active {
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transform: translateY(-1px);
         }
         
         .distance-inputs, .time-inputs {
-            margin-top: 10px;
+            margin-top: 20px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 16px;
+            border-left: 4px solid #667eea;
         }
         
         .time-inputs {
@@ -83,103 +186,261 @@
         }
         
         .results {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 30px 0;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            margin: 40px 0;
             text-align: center;
+            box-shadow: 0 15px 35px rgba(240, 147, 251, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .results::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
         
         .time-saved {
-            font-size: 24px;
-            font-weight: bold;
-            color: #d9534f;
-            margin-bottom: 10px;
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
         }
         
         .breakdown {
-            color: #666;
-            font-size: 14px;
+            font-size: 1em;
+            opacity: 0.95;
+            font-weight: 400;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .breakdown strong {
+            font-weight: 600;
         }
         
         .explanation {
-            background-color: #e7f3ff;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
         }
         
         .explanation h3 {
-            margin-top: 0;
-            color: #2c5aa0;
+            margin-bottom: 20px;
+            color: #2d3748;
+            font-size: 1.4em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .explanation h3::before {
+            content: '🧮';
+            font-size: 1.2em;
+        }
+        
+        .explanation p {
+            margin-bottom: 15px;
+            color: #4a5568;
+            line-height: 1.7;
         }
         
         .formula {
-            background-color: #f1f1f1;
-            padding: 10px;
-            border-radius: 5px;
-            font-family: monospace;
-            margin: 10px 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .steps {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .step {
+            margin-bottom: 10px;
+            color: #2d3748;
+            font-weight: 500;
+        }
+        
+        .example {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #ed8936;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #fed7d7, #feb2b2);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #e53e3e;
+            color: #742a2a;
+            font-style: italic;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 20px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .input-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .toggle-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚗 Speeding Time Saved Calculator</h1>
-        
-        <div class="input-group">
-            <label for="speedLimit">Speed Limit (mph):</label>
-            <input type="number" id="speedLimit" value="65" min="1" max="200">
+        <div class="header">
+            <h1>🚗 Speeding Calculator</h1>
+            <div class="subtitle">Discover how little time you actually save</div>
         </div>
         
-        <div class="input-group">
-            <label for="speedingSpeed">Your Speed (mph):</label>
-            <input type="number" id="speedingSpeed" value="80" min="1" max="200">
-        </div>
-        
-        <div class="input-group">
-            <div class="toggle-container">
-                <span>Calculate by:</span>
-                <button class="toggle-btn active" id="distanceBtn" onclick="toggleMode('distance')">Distance</button>
-                <button class="toggle-btn" id="timeBtn" onclick="toggleMode('time')">Time</button>
+        <div class="content">
+            <div class="input-section">
+                <div class="input-group">
+                    <div class="input-row">
+                        <div>
+                            <label for="speedLimit">Speed Limit</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="speedLimit" value="65" min="1" max="200">
+                                <span class="unit">mph</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-row">
+                        <div>
+                            <label for="speedingSpeed">Your Speed</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="speedingSpeed" value="80" min="1" max="200">
+                                <span class="unit">mph</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <div class="toggle-container">
+                        <span class="toggle-label">Calculate by:</span>
+                        <div class="toggle-buttons">
+                            <button class="toggle-btn active" id="distanceBtn" onclick="toggleMode('distance')">Distance</button>
+                            <button class="toggle-btn" id="timeBtn" onclick="toggleMode('time')">Time</button>
+                        </div>
+                    </div>
+                    
+                    <div class="distance-inputs" id="distanceInputs">
+                        <label for="distance">Distance</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="distance" value="100" min="0.1" step="0.1">
+                            <span class="unit">miles</span>
+                        </div>
+                    </div>
+                    
+                    <div class="time-inputs" id="timeInputs">
+                        <div style="margin-bottom: 20px;">
+                            <label for="timeHours">Travel Time</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="timeHours" value="1" min="0.01" step="0.01">
+                                <span class="unit">hours</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="timeSpeed">Reference Speed</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="timeSpeed" value="65" min="1" max="200">
+                                <span class="unit">mph</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
-            <div class="distance-inputs" id="distanceInputs">
-                <label for="distance">Distance (miles):</label>
-                <input type="number" id="distance" value="100" min="0.1" step="0.1">
+            <div class="results">
+                <div class="time-saved" id="timeSaved">0 minutes</div>
+                <div class="breakdown" id="breakdown">
+                    <strong>Time at speed limit:</strong> <span id="normalTime">0 hours 0 minutes</span><br>
+                    <strong>Time at your speed:</strong> <span id="speedingTime">0 hours 0 minutes</span>
+                </div>
             </div>
             
-            <div class="time-inputs" id="timeInputs">
-                <label for="timeHours">Time (hours):</label>
-                <input type="number" id="timeHours" value="1" min="0.01" step="0.01">
-                <label for="timeSpeed" style="margin-top: 10px;">At Speed (mph):</label>
-                <input type="number" id="timeSpeed" value="65" min="1" max="200">
+            <div class="explanation">
+                <h3>How This Works</h3>
+                <p>This calculator reveals the surprising truth about speeding: you save far less time than you think, especially over shorter distances.</p>
+                
+                <div class="formula">
+                    Time = Distance ÷ Speed
+                </div>
+                
+                <div class="steps">
+                    <div class="step"><strong>Step 1:</strong> Calculate travel time at the speed limit</div>
+                    <div class="step"><strong>Step 2:</strong> Calculate travel time at your actual speed</div>
+                    <div class="step"><strong>Step 3:</strong> Find the difference to see time saved</div>
+                </div>
+                
+                <div class="example">
+                    <strong>Real Example:</strong> Driving 80 mph instead of 65 mph for 100 miles saves you only about 18 minutes. That's less than the length of a typical TV episode!
+                </div>
+                
+                <div class="warning">
+                    ⚠️ Remember: Those few minutes saved aren't worth the tickets, accidents, or stress. Drive safe!
+                </div>
             </div>
-        </div>
-        
-        <div class="results">
-            <div class="time-saved" id="timeSaved">0 minutes</div>
-            <div class="breakdown" id="breakdown">
-                Time at speed limit: <span id="normalTime">0 hours 0 minutes</span><br>
-                Time at your speed: <span id="speedingTime">0 hours 0 minutes</span>
-            </div>
-        </div>
-        
-        <div class="explanation">
-            <h3>How This Works</h3>
-            <p>This calculator shows you exactly how much time you save (or don't save) by speeding. The math is simple:</p>
-            
-            <div class="formula">
-                Time = Distance ÷ Speed
-            </div>
-            
-            <p><strong>Step 1:</strong> Calculate time at speed limit<br>
-            <strong>Step 2:</strong> Calculate time at your actual speed<br>
-            <strong>Step 3:</strong> Subtract to find time saved</p>
-            
-            <p><strong>Example:</strong> Going 80 mph instead of 65 mph for 100 miles saves you only about 18 minutes. Is the risk of a ticket, higher fuel costs, and safety concerns worth those 18 minutes?</p>
-            
-            <p><em>Remember: Small speed increases yield surprisingly small time savings, especially over shorter distances.</em></p>
         </div>
     </div>
 
@@ -244,13 +505,10 @@
             
             if (savedTime > 0) {
                 document.getElementById('timeSaved').textContent = `${formatTime(savedTime)} saved`;
-                document.getElementById('timeSaved').style.color = '#d9534f';
             } else if (savedTime < 0) {
                 document.getElementById('timeSaved').textContent = `${formatTime(-savedTime)} lost`;
-                document.getElementById('timeSaved').style.color = '#5cb85c';
             } else {
                 document.getElementById('timeSaved').textContent = 'No time difference';
-                document.getElementById('timeSaved').style.color = '#666';
             }
         }
         
